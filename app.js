@@ -1,6 +1,6 @@
 const express = require('express');
 // Import mysql
-const mysql = require('mysql');
+
 
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -9,21 +9,7 @@ const app = express();
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-// Connect to database
-const db = mysql.createConnection({
-    host: '127.0.0.1',
-    user: 'root',
-    password: 'Zm90517!',
-    database: 'employee_db'
-});
 
-db.connect((err) => {
-    if (err) {
-        console.error('Error connecting to the database:', err);
-        return;
-    }
-    console.log('Connected to the database!');
-});
 
 // Create Employee
 app.post('/api/new-employee', ({ body }, res) => {
@@ -60,5 +46,4 @@ app.get('/api/employees', (req, res) => {
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
-
 
