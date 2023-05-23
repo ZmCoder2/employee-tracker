@@ -24,7 +24,7 @@ const db = mysql.createConnection(
 app.post('/api/new-employee', ({ body }, res) => {
     const sql = `INSERT INTO employees (employee_name)
     VALUES (?)`;
-    const params = [body.movie_name];
+    const params = [body.dept_name];
 
     db.query(sql, params, (err, result) => {
         if (err) {
@@ -38,3 +38,17 @@ app.post('/api/new-employee', ({ body }, res) => {
     });
 });
 
+app.get('/api/employees', (req, res) => {
+    const sql = `SELECT id, dept_name AS title FROM role`;
+
+    db.query(sql, (err, rows) => {
+        if (err) {
+            res.status(500).json({ error: err.message });
+            return;
+        }
+        res.json({
+            message: 'success',
+            data: rows
+        });
+    });
+});
