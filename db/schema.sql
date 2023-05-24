@@ -12,7 +12,10 @@ CREATE TABLE role_info (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(30),
     salary DECIMAL,
-    department_id INT
+    department_id INT,
+    PRIMARY KEY (id),
+    FOREIGN KEY (department_info_id)
+    
 );
 
 CREATE TABLE employees_info (
@@ -21,7 +24,7 @@ CREATE TABLE employees_info (
    last_name VARCHAR(30),
    role_id INT,
    manager_id INT
-   
+   PRIMARY KEY 
 );
 
 -- Null if the employee has no manager
