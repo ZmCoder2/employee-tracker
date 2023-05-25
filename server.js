@@ -68,19 +68,53 @@ const viewPrompt = function() {
 };
 
 
-
-
-
 function viewDepartments() {
-    let query = 'SELECT * FROM department_info'
+    let query = 'SELECT * FROM department_info';
     db.query(query, function (err, res) {
         console.table(res);
         viewPrompt();
     })
 }
 
+function viewRoles() {
+    query = 'SELECT * FROM role_info';
+    db.query(query, function (err, res) {
+        console.table(res);
+        // ??? idk
+    })
+}
+
+function viewEmployees() {
+    query = 'SELECT * FROM employees_info';
+    db.query(query, function (err, res) {
+        console.table(res);
+        // need to figure out what goes in here with tutor
+    })
+}
+
+// Add a Department
+function addDepartment() {
+    query = 'ALTER TABLE department_info' + 'ADD COLUMN '
+}
+
+// Add a Role || Will I have to create a different variable?
+function addRole() {
+    query = 'ALTER TABLE role_info' + 'ADD COLUMN'
+}
+
+// Add Employee
+function addEmployee() {
+    query = 'ALTER TABLE employee_info' + 'ADD COLUMN'
+}
+
+// Update Employee Role
+function updateEmployeeRole() {
+    // I think this is right but I am not sure ASK TUTOR!!
+    query = 'ALTER TABLE role_info' + 'MODIFY COLUMN '
+}
 
 
+// I dont know what I was trying to do here... :/
 // Views all departments
 // function viewDepartment() {
 //     connection.query("SELECT * FROM department;",
@@ -95,9 +129,3 @@ function viewDepartments() {
 //         }
 //     })
 // }
-
-
-
-// app.listen(PORT, () => {
-//     console.log(`Server running on port ${PORT}`);
-// });

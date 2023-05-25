@@ -21,9 +21,9 @@ CREATE TABLE employees_info (
    first_name VARCHAR(30),
    last_name VARCHAR(30),
    role_id INT,
-   department_id INT,
+   department_num INT,
    FOREIGN KEY (role_id) REFERENCES role_info(id),
-   FOREIGN KEY (department_id) REFERENCES department_info(id)
+   FOREIGN KEY (department_num) REFERENCES department_info(id)
 );
 
 -- Null if the employee has no manager

@@ -12,7 +12,7 @@ VALUES ('1', 'Head Coach', '8.3'),
        ('5', 'Defensive Coordinator', '2.0'),
        ('6', 'Wide Receiver', '7.7');
 
-INSERT INTO employees_info (first_name, last_name, role_id, department_info_id, salary)
+INSERT INTO employees_info (first_name, last_name, role_id, department_num, salary)
 VALUES ('Joe', 'Burrow', '2', '2', 40400000),
        ('Ed', 'Ogeron', '1', '1', 8000000),
        ('Jammar', 'Chase', '6', '2', 7704000),
