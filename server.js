@@ -1,23 +1,27 @@
+
 const inquirer = require('inquirer');
+
 // Import mysql
-const mysql = require('mysql');
+
+const mysql = require('mysql2');
 require('dotenv').config();
 const util = require('util')
 
-const PORT = process.env.PORT || 3001;
+// const PORT = process.env.PORT || 3001;
 
 // express middleware
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
+// app.use(express.urlencoded({ extended: false }));
+// app.use(express.json());
 
-connection.query = util.promisify(connection.query);
+// connection.query = util.promisify(connection.query);
 
 // Connect to database
 const db = mysql.createConnection({
     host: '127.0.0.1',
     user: 'root',
     password: 'Zm90517!',
-    database: 'employee_db'
+    database: 'employee_db',
+    port: 3306,
 });
 
 db.connect((err) => {
@@ -25,7 +29,7 @@ db.connect((err) => {
     viewPrompt();
 });
 
-function viewPrompt() {
+const viewPrompt = function() {
     inquirer
     .prompt([
         {
@@ -63,23 +67,37 @@ function viewPrompt() {
     })
 };
 
-// Views all departments
-function viewDepartment() {
-    connection.query("SELECT * FROM department;",
-    async function (err, res) { // An async task is one in which a third-party process is doing the task.
-        try {
-            if (err) throw err;
-            // new line in the console
-            const departmentChoices = results.map(department => department.name);
 
-        } catch {
-            
-        }
+
+
+
+function viewDepartments() {
+    let query = 'SELECT * FROM department_info'
+    db.query(query, function (err, res) {
+        console.table(res);
+        viewPrompt();
     })
 }
 
 
 
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
+// Views all departments
+// function viewDepartment() {
+//     connection.query("SELECT * FROM department;",
+//     async function (err, res) { // An async task is one in which a third-party process is doing the task.
+//         try {
+//             if (err) throw err;
+//             // new line in the console
+//             const departmentChoices = results.map(department => department.name);
+
+//         } catch {
+            
+//         }
+//     })
+// }
+
+
+
+// app.listen(PORT, () => {
+//     console.log(`Server running on port ${PORT}`);
+// });
