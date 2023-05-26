@@ -80,7 +80,6 @@ function viewRoles() {
     query = 'SELECT * FROM role_info';
     db.query(query, function (err, res) {
         console.table(res);
-        // ??? idk
     })
 }
 
@@ -88,23 +87,88 @@ function viewEmployees() {
     query = 'SELECT * FROM employees_info';
     db.query(query, function (err, res) {
         console.table(res);
-        // need to figure out what goes in here with tutor
     })
 }
 
 // Add a Department
 function addDepartment() {
-    query = 'ALTER TABLE department_info' + 'ADD COLUMN '
+    
+    query = `INSERT INTO department_info (dept_name) VALUES (?)`
+
+    inquirer.prompt([
+        {
+            type: 'input',
+            message: 'Enter a new department name.',
+            name: 'deptName',
+        }
+    ]).then((newDeptInput) => {
+        console.table(newDeptInput)
+        db.query(query, newDeptInput.deptName, function (err, res) {
+            if(err) throw err
+            viewDepartments();
+        })
+    }) 
+    
 }
 
-// Add a Role || Will I have to create a different variable?
+// Add a Role
 function addRole() {
-    query = 'ALTER TABLE role_info' + 'ADD COLUMN'
+    
+    query = `INSERT INTO role_info [title, salary, department_id]  VALUES (?)`
+
+    inquirer.prompt([
+        {
+            type: 'input',
+            message: 'Enter the new role.',
+            name: 'title'
+        },
+        {
+            type: 'input',
+            message: 'Enter the salary for the new role',
+            name: 'salary'
+        },
+        {
+            type: 'input',
+            message: 'Enter the department for the new role',
+            name: 'department_id'
+        }
+    ]).then((newRoleInput) => {
+        console.table(newRoleInput)
+        db.query(query, [newRoleInput.title, newRoleInput.salary, newRoleInput.department_id], function (err, res) {
+            if (err) throw err
+            viewRoles();
+        })
+    })
 }
 
 // Add Employee
 function addEmployee() {
-    query = 'ALTER TABLE employee_info' + 'ADD COLUMN'
+    
+    query = `INSERT INTO employees_info [first_name, last_name, manager_name]  VALUES (?)`
+
+    inquirer.prompt([
+        {
+            type: 'input',
+            message: 'Enter the new employees first name.',
+            name: 'newFirstName'
+        },
+        {
+            type: 'input',
+            message: 'Enter the new employees last name.',
+            name: 'newLastName'
+        },
+        {
+            type: 'input',
+            message: 'Enter the new employees manager.',
+            name: 'newManager'
+        }
+    ]).then((newEmployee) => {
+        console.table(newEmployee)
+        db.query(query, [newEmployee.newFirstName, newEmployee.newLastName, newEmployee.newManager], function (err, res) {
+            if (err) throw (err)
+            viewEmployees();
+        })
+    })
 }
 
 // Update Employee Role
@@ -113,19 +177,3 @@ function updateEmployeeRole() {
     query = 'ALTER TABLE role_info' + 'MODIFY COLUMN '
 }
 
-
-// I dont know what I was trying to do here... :/
-// Views all departments
-// function viewDepartment() {
-//     connection.query("SELECT * FROM department;",
-//     async function (err, res) { // An async task is one in which a third-party process is doing the task.
-//         try {
-//             if (err) throw err;
-//             // new line in the console
-//             const departmentChoices = results.map(department => department.name);
-
-//         } catch {
-            
-//         }
-//     })
-// }
