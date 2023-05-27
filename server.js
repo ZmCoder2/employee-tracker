@@ -78,7 +78,7 @@ function viewDepartments() {
 }
 
 function viewRoles() {
-  query = "SELECT * FROM role_info";
+  query = `SELECT * FROM role_info`;
   db.query(query, function(err, res) {
     console.table(res);
     viewPrompt();
@@ -86,7 +86,7 @@ function viewRoles() {
 }
 
 function viewEmployees() {
-  query = "SELECT * FROM employees_info";
+  query = `SELECT * FROM employees_info`;
   db.query(query, function(err, res) {
     console.table(res);
     viewPrompt();
@@ -116,35 +116,34 @@ function addDepartment() {
 
 // Add an Employee
 function addEmployee() {
-    
-    query = `INSERT INTO employees_info [first_name, last_name, manager_name]  VALUES (?)`
+  const query = `INSERT INTO employees_info (first_name, last_name, manager_name) VALUES (?, ?, ?)`;
 
-    inquirer.prompt([
-        {
-            type: 'input',
-            message: 'Enter the new employees first name.',
-            name: 'newFirstName'
-        },
-        {
-            type: 'input',
-            message: 'Enter the new employees last name.',
-            name: 'newLastName'
-        },
-        {
-            type: 'input',
-            message: 'Enter the new employees manager.',
-            name: 'newManager'
-        }
-    ]).then((newEmployee) => {
-        console.table(newEmployee)
-        db.query(query, [newEmployee.newFirstName, newEmployee.newLastName, newEmployee.newManager], function (err, res) {
-            if (err) throw (err)
-            viewEmployees();
-        })
-    })
+  inquirer.prompt([
+      {
+          type: 'input',
+          message: "Enter the new employee's first name.",
+          name: 'newFirstName'
+      },
+      {
+          type: 'input',
+          message: "Enter the new employee's last name.",
+          name: 'newLastName'
+      },
+      {
+          type: 'input',
+          message: "Enter the new employee's manager.",
+          name: 'newManager'
+      }
+  ]).then((newEmployee) => {
+      console.table(newEmployee);
+      db.query(query, [newEmployee.newFirstName, newEmployee.newLastName, newEmployee.newManager], function (err, res) {
+          if (err) throw err;
+          viewEmployees();
+      });
+  });
 }
 
-// Add Employee
+// Add a role
 function addRole() {
   inquirer
     .prompt([
@@ -160,7 +159,7 @@ function addRole() {
       },
       {
         type: "input",
-        message: "Enter the department for the new role",
+        message: "Enter the department name for the new role",
         name: "department_id"
       }
     ])
@@ -170,13 +169,27 @@ function addRole() {
       const query = `INSERT INTO role_info (title, salary, department_id) VALUES (?, ?, ?)`;
       const { title, salary, department_id } = newRoleInput;
 
-      db.query(query, [title, salary, department_id], function(err, res) {
+      const departmentQuery = `SELECT id FROM department_info WHERE dept_name = ?`;
+
+      db.query(departmentQuery, [department_id], function(err, res) {
         if (err) throw err;
-        console.log("New role added successfully!");
-        viewRoles();
+
+        if (res.length === 0) {
+          console.log("Department not found. Please enter a valid department name.");
+          return;
+        }
+
+        const department_id = res[0].id;
+
+        db.query(query, [title, salary, department_id], function(err, res) {
+          if (err) throw err;
+          console.log("New role added successfully!");
+          viewRoles();
+        });
       });
     });
 }
+
 
 function updateEmployeeRole() {
   inquirer
@@ -204,7 +217,7 @@ function updateEmployeeRole() {
     });
 }
 
-// Update Employee Role
-// function updateEmployeeRole() {
-//   query = "";
-// }
+function exitMenu() {
+  query = `exit;`;
+  process.exit(0);
+}
