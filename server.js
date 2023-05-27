@@ -1,11 +1,10 @@
-
-const inquirer = require('inquirer');
+const inquirer = require("inquirer");
 
 // Import mysql
 
-const mysql = require('mysql2');
-require('dotenv').config();
-const util = require('util')
+const mysql = require("mysql2");
+require("dotenv").config();
+const util = require("util");
 
 // const PORT = process.env.PORT || 3001;
 
@@ -17,131 +16,105 @@ const util = require('util')
 
 // Connect to database
 const db = mysql.createConnection({
-    host: '127.0.0.1',
-    user: 'root',
-    password: 'Zm90517!',
-    database: 'employee_db',
-    port: 3306,
+  host: "127.0.0.1",
+  user: "root",
+  password: "Zm90517!",
+  database: "employee_db",
+  port: 3306
 });
 
-db.connect((err) => {
-    if (err) throw err;
-    viewPrompt();
+db.connect(err => {
+  if (err) throw err;
+  viewPrompt();
 });
 
 const viewPrompt = function() {
-    inquirer
+  inquirer
     .prompt([
-        {
-            type: 'list',
-            message: 'What would you like to do?',
-            name: 'question',
-            choices: ['view all departments', 'view all roles', 'view all employees', 'add a department', 'add a role', 'add an employee', 'update an employee role', 'Exit Menu']
-        }
+      {
+        type: "list",
+        message: "What would you like to do?",
+        name: "question",
+        choices: [
+          "view all departments",
+          "view all roles",
+          "view all employees",
+          "add a department",
+          "add a role",
+          "add an employee",
+          "update an employee role",
+          "Exit Menu"
+        ]
+      }
     ])
     .then(response => {
-        if (response.question === 'view all departments') {
-            viewDepartments();
-        }
-        else if (response.question === 'view all roles') {
-            viewRoles();
-        }
-        else if (response.question === 'view all employees') {
-            viewEmployees();
-        }
-        else if (response.question === 'add a department') {
-            addDepartment();
-        }
-        else if (response.question === 'add a role') {
-            addRole();
-        }
-        else if (response.question === 'add an employee') {
-            addEmployee();
-        }
-        else if (response.question === 'update an employee role') {
-            updateEmployeeRole();
-        }
-        else if (response.question === 'Exit Menu') {
-            exitMenu();
-        }
-    })
+      if (response.question === "view all departments") {
+        viewDepartments();
+      } else if (response.question === "view all roles") {
+        viewRoles();
+      } else if (response.question === "view all employees") {
+        viewEmployees();
+      } else if (response.question === "add a department") {
+        addDepartment();
+      } else if (response.question === "add a role") {
+        addRole();
+      } else if (response.question === "add an employee") {
+        addEmployee();
+      } else if (response.question === "update an employee role") {
+        updateEmployeeRole();
+      } else if (response.question === "Exit Menu") {
+        exitMenu();
+      }
+    });
 };
 
-
+//
 function viewDepartments() {
-    let query = 'SELECT * FROM department_info';
-    db.query(query, function (err, res) {
-        console.table(res);
-        viewPrompt();
-    })
+  let query = "SELECT * FROM department_info";
+  db.query(query, function(err, res) {
+    console.table(res);
+    viewPrompt();
+  });
 }
 
 function viewRoles() {
-    query = 'SELECT * FROM role_info';
-    db.query(query, function (err, res) {
-        console.table(res);
-    })
+  query = "SELECT * FROM role_info";
+  db.query(query, function(err, res) {
+    console.table(res);
+    viewPrompt();
+  });
 }
 
 function viewEmployees() {
-    query = 'SELECT * FROM employees_info';
-    db.query(query, function (err, res) {
-        console.table(res);
-    })
+  query = "SELECT * FROM employees_info";
+  db.query(query, function(err, res) {
+    console.table(res);
+    viewPrompt();
+  });
 }
 
 // Add a Department
 function addDepartment() {
-    
-    query = `INSERT INTO department_info (dept_name) VALUES (?)`
+  query = `INSERT INTO department_info (dept_name) VALUES (?)`;
 
-    inquirer.prompt([
-        {
-            type: 'input',
-            message: 'Enter a new department name.',
-            name: 'deptName',
-        }
-    ]).then((newDeptInput) => {
-        console.table(newDeptInput)
-        db.query(query, newDeptInput.deptName, function (err, res) {
-            if(err) throw err
-            viewDepartments();
-        })
-    }) 
-    
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        message: "Enter a new department name.",
+        name: "deptName"
+      }
+    ])
+    .then(newDeptInput => {
+      console.table(newDeptInput);
+      db.query(query, newDeptInput.deptName, function(err, res) {
+        if (err) throw err;
+        viewDepartments();
+      });
+    });
 }
 
-// Add a Role
-function addRole() {
-    
-    query = `INSERT INTO role_info [title, salary, department_id]  VALUES (?)`
-
-    inquirer.prompt([
-        {
-            type: 'input',
-            message: 'Enter the new role.',
-            name: 'title'
-        },
-        {
-            type: 'input',
-            message: 'Enter the salary for the new role',
-            name: 'salary'
-        },
-        {
-            type: 'input',
-            message: 'Enter the department for the new role',
-            name: 'department_id'
-        }
-    ]).then((newRoleInput) => {
-        console.table(newRoleInput)
-        db.query(query, [newRoleInput.title, newRoleInput.salary, newRoleInput.department_id], function (err, res) {
-            if (err) throw err
-            viewRoles();
-        })
-    })
-}
-
-// Add Employee
+// Add an Employee
 function addEmployee() {
     
     query = `INSERT INTO employees_info [first_name, last_name, manager_name]  VALUES (?)`
@@ -171,9 +144,67 @@ function addEmployee() {
     })
 }
 
-// Update Employee Role
-function updateEmployeeRole() {
-    // I think this is right but I am not sure ASK TUTOR!!
-    query = 'ALTER TABLE role_info' + 'MODIFY COLUMN '
+// Add Employee
+function addRole() {
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        message: "Enter the new role.",
+        name: "title"
+      },
+      {
+        type: "input",
+        message: "Enter the salary for the new role",
+        name: "salary"
+      },
+      {
+        type: "input",
+        message: "Enter the department for the new role",
+        name: "department_id"
+      }
+    ])
+    .then(newRoleInput => {
+      console.table(newRoleInput);
+
+      const query = `INSERT INTO role_info (title, salary, department_id) VALUES (?, ?, ?)`;
+      const { title, salary, department_id } = newRoleInput;
+
+      db.query(query, [title, salary, department_id], function(err, res) {
+        if (err) throw err;
+        console.log("New role added successfully!");
+        viewRoles();
+      });
+    });
 }
 
+function updateEmployeeRole() {
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        message: "Enter the employee's ID:",
+        name: "employeeId"
+      },
+      {
+        type: "input",
+        message: "Enter the employee's new position:",
+        name: "newRole"
+      }
+    ])
+    .then(positionUpdate => {
+      const { employeeId, newRole } = positionUpdate;
+      const query = `UPDATE employees_info SET position = '${newRole}' WHERE id = ${employeeId}`;
+
+      db.query(query, function(err, res) {
+        if (err) throw err;
+        console.log(`Employee's position updated successfully.`);
+        viewEmployees();
+      });
+    });
+}
+
+// Update Employee Role
+// function updateEmployeeRole() {
+//   query = "";
+// }
