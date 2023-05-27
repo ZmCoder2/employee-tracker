@@ -1,4 +1,4 @@
-# employee-tracker
+Employee Database
 
 ## Description
 This application helps users keep track of their companies information when it comes to departments, roles, or employees. When the user starts the application they are presented with the following options: view all departments, view all roles, view all employees, add a department, add a role, add a role, add an employee, and update an employee role.
